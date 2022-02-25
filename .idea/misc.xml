@@ -3,7 +3,15 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/FPT/Year4/SemesterSpring/PRM_392/Project/ExamEduAndroid/app/src/main/res/layout/activity_main.xml" value="0.15534420289855072" />
+        <entry key="..\:/FPT/Year4/SemesterSpring/PRM_392/Project/ExamEduAndroid/app/src/main/res/drawable/background_round_padded.xml" value="0.21388888888888888" />
+        <entry key="..\:/FPT/Year4/SemesterSpring/PRM_392/Project/ExamEduAndroid/app/src/main/res/drawable/ic_baseline_notifications_24.xml" value="0.2703125" />
+        <entry key="..\:/FPT/Year4/SemesterSpring/PRM_392/Project/ExamEduAndroid/app/src/main/res/drawable/ic_default_avatar_background.xml" value="0.2703125" />
+        <entry key="..\:/FPT/Year4/SemesterSpring/PRM_392/Project/ExamEduAndroid/app/src/main/res/drawable/ic_exam_edu_logo_background.xml" value="0.2703125" />
+        <entry key="..\:/FPT/Year4/SemesterSpring/PRM_392/Project/ExamEduAndroid/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2703125" />
+        <entry key="..\:/FPT/Year4/SemesterSpring/PRM_392/Project/ExamEduAndroid/app/src/main/res/drawable/menu_background_color_state.xml" value="0.22407407407407406" />
+        <entry key="..\:/FPT/Year4/SemesterSpring/PRM_392/Project/ExamEduAndroid/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/FPT/Year4/SemesterSpring/PRM_392/Project/ExamEduAndroid/app/src/main/res/layout/horizontal_navigation_bar.xml" value="0.18659420289855072" />
+        <entry key="..\:/FPT/Year4/SemesterSpring/PRM_392/Project/ExamEduAndroid/app/src/main/res/menu/activity_main_drawer.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>
