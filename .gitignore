@@ -22,7 +22,8 @@ local.properties
 build/
 .navigation
 captures/
-output.json 
+output.json
+misc.xml
 
 *.apk
 *.ap_
