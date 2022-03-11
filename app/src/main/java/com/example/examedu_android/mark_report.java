@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -20,7 +21,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class mark_report extends AppCompatActivity {
+public class mark_report  extends BaseActivity {
     ApiService service;
     TokenManager tokenManager;
     Call<List<MarkReport>> call;
@@ -33,6 +34,10 @@ public class mark_report extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mark_report);
+        super.onCreateDrawer();
+
+        setSupportActionBar(findViewById(R.id.myToolBar));
+        getSupportActionBar().setTitle(null);
         Toast.makeText(this, "day la mark report", Toast.LENGTH_SHORT).show();
         //call api
         service = CheckToken.check(this);
@@ -63,6 +68,7 @@ public class mark_report extends AppCompatActivity {
         //rcv
         rcvMarkReport = findViewById(R.id.rcv_mark_report);
         markReportAdapter = new MarkReportAdapter(this);
+        Context test = this;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
         rcvMarkReport.setLayoutManager(linearLayoutManager);
 
