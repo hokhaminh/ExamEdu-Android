@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     tokenManager.saveToken(response.body());
 
                     Toast.makeText(MainActivity.this,"dung roi",Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, PostActivity.class));
+                    startActivity(new Intent(MainActivity.this, mark_report.class));
                     finish();
 
                 }

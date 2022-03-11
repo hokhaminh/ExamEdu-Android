@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ExamEduAndroid">
         <activity
-            android:name=".module_list.ModuleListActivity"
+            android:name=".mark_report"
             android:exported="false" />
         <activity
             android:name=".PostActivity"
