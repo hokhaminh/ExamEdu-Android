@@ -69,7 +69,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         shut_down_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(BaseActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+
                     call_logout.enqueue(new Callback<ResponseDTO>() {
                         @Override
                         public void onResponse(Call<ResponseDTO> call, Response<ResponseDTO> response) {
