@@ -120,7 +120,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this, "Go to exam schedule", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_mark_report:
-                Toast.makeText(this, "Go to mark report", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(this, mark_report.class);
+                startActivity(i);
                 break;
         }
 

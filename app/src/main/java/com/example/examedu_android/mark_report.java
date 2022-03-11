@@ -33,15 +33,15 @@ public class mark_report extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mark_report);
-
+        Toast.makeText(this, "day la mark report", Toast.LENGTH_SHORT).show();
         //call api
         service = CheckToken.check(this);
         if(service == null){
             finish();
         }
-        Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
+
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs",MODE_PRIVATE));
-        call = service.markReportGet(8,11);
+        call = service.markReportGet(8,2);
         call.enqueue(new Callback<List<MarkReport>>() {
             @Override
             public void onResponse(Call<List<MarkReport>> call, Response<List<MarkReport>> response) {
