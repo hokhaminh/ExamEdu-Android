@@ -21,11 +21,11 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/avatar"
+            android:id="@+id/shut_down_btn"
             android:layout_width="33dp"
             android:layout_height="33dp"
-            android:layout_marginEnd="16dp"
-            android:src="@mipmap/ic_default_avatar"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/shutdown_icon_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/myToolBar"
             app:layout_constraintTop_toTopOf="parent"
@@ -35,10 +35,25 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/avatar"
+            android:layout_width="33dp"
+            android:layout_height="33dp"
+            android:layout_marginEnd="12dp"
+            android:src="@mipmap/ic_default_avatar"
+            app:layout_constraintBottom_toBottomOf="@+id/shut_down_btn"
+            app:layout_constraintEnd_toStartOf="@+id/shut_down_btn"
+            app:layout_constraintTop_toTopOf="@+id/shut_down_btn"
+            app:layout_constraintVertical_bias="0.304"
+            app:shapeAppearanceOverlay="@style/Circular"
+            app:strokeColor="@color/white"
+            app:strokeWidth="5dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/notification_bell"
             android:layout_width="33dp"
             android:layout_height="33dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="12dp"
             android:background="@color/light_gray"
             android:scaleX="1"
             android:scaleY="1"
@@ -46,7 +61,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/avatar"
             app:layout_constraintEnd_toStartOf="@+id/avatar"
             app:layout_constraintTop_toTopOf="@+id/avatar"
-            app:layout_constraintVertical_bias="0.416"
+            app:layout_constraintVertical_bias="0.0"
             app:shapeAppearanceOverlay="@style/Circular"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -69,7 +84,7 @@
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="36dp"
+            android:layout_marginEnd="12dp"
             android:text="ExamEdu"
             android:textColor="@color/teal"
             app:layout_constraintBottom_toBottomOf="@+id/notification_bell"

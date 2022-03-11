@@ -1,8 +1,11 @@
 package com.example.examedu_android;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.LayoutRes;
@@ -12,11 +15,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.JsonObject;
+
+import Token.TokenManager;
+import api.ApiService;
+import api.CheckToken;
+import models.ResponseDTO;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class BaseActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
+
+    private ShapeableImageView shut_down_icon;
+
+    private ApiService apiService;
+    private TokenManager tokenManager2;
+    Call<ResponseDTO> call_logout;
 
     protected void onCreateDrawer() {
 //        super.onCreate(savedInstanceState);
@@ -33,7 +52,43 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.vertical_navigation);
         //Set listener for selected items on the vertical navigation bar
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        apiService = CheckToken.check(this);
+        if(apiService == null)
+        {
+            finish();
+        }
+
+        call_logout = apiService.logout();
+
+
+        //Init components
+        shut_down_icon = findViewById(R.id.shut_down_btn);
+
+        shut_down_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(BaseActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                    call_logout.enqueue(new Callback<ResponseDTO>() {
+                        @Override
+                        public void onResponse(Call<ResponseDTO> call, Response<ResponseDTO> response) {
+                            tokenManager2 = TokenManager.getInstance(getSharedPreferences("prefs",MODE_PRIVATE));
+                            tokenManager2.deleteToken();
+
+                            startActivity(new Intent(BaseActivity.this, MainActivity.class));
+                            finish();
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseDTO> call, Throwable t) {
+
+                        }
+                    });
+            }
+        });
     }
+
 
     @Override
     protected void onPostCreate(Bundle saveInstanceState){
