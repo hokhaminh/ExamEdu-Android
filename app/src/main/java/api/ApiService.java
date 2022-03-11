@@ -10,6 +10,7 @@ import java.util.List;
 import models.AccessToken;
 import models.LoginBody;
 import models.MarkReport;
+import models.ResponseDTO;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -27,6 +28,9 @@ public interface ApiService {
     @POST("Authentication/login")
     Call<AccessToken> login(@Body LoginBody body);
 
+    @POST("Authentication/logout")
+    Call<ResponseDTO> logout();
+
     @POST("Token/refresh")
     Call<AccessToken> refresh();
 
@@ -35,6 +39,7 @@ public interface ApiService {
 
     @GET("student/markReport/{studentId}/{moduleId}")
     Call<List<MarkReport>> markReportGet(@Path("studentId") int studentId,@Path("moduleId") int moduleId);
+
 
 
 
