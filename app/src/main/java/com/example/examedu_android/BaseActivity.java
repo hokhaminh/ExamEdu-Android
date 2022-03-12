@@ -39,7 +39,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     protected void onCreateDrawer() {
 //        super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_post);
+//        setContentView(R.layout.activity_post);
         setSupportActionBar(findViewById(R.id.myToolBar));
         getSupportActionBar().setTitle(null);
 
@@ -120,8 +120,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this, "Go to exam schedule", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_mark_report:
-                Intent i = new Intent(this, mark_report.class);
-                startActivity(i);
+                startActivity(new Intent(this, mark_report.class));
+                finish();
                 break;
         }
 
