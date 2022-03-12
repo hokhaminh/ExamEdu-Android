@@ -39,7 +39,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     protected void onCreateDrawer() {
 //        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+        //setContentView(R.layout.activity_post);
         setSupportActionBar(findViewById(R.id.myToolBar));
         getSupportActionBar().setTitle(null);
 
