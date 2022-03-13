@@ -16,7 +16,6 @@ import Token.TokenManager;
 import api.ApiService;
 import api.RetrofitBuilder;
 import models.AccessToken;
-import models.ExamSchedule;
 import models.LoginBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
 
         if(tokenManager.getToken().getAccessToken() != null){
-            startActivity(new Intent(MainActivity.this, ExamScheduleActivity.class));
+            startActivity(new Intent(MainActivity.this, PostActivity.class));
             finish();
         }
 
@@ -75,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     tokenManager.saveToken(response.body());
 
                     Toast.makeText(MainActivity.this,"dung roi",Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, ExamScheduleActivity.class));
+                    startActivity(new Intent(MainActivity.this, PostActivity.class));
                     finish();
 
                 }
