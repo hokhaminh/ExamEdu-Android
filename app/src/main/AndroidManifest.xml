@@ -13,6 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ExamEduAndroid">
         <activity
+            android:name=".ExamScheduleActivity"
+            android:exported="false" />
+        <activity
             android:name=".PostActivity"
             android:exported="false" />
         <activity
