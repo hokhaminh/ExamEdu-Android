@@ -1,91 +1,45 @@
 package com.example.examedu_android.module_list;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.widget.Toast;
 
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.examedu_android.BaseActivity;
 import com.example.examedu_android.R;
-import com.google.android.material.navigation.NavigationView;
 
-public class ModuleListActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private DrawerLayout drawerLayout;
-    private ActionBarDrawerToggle drawerToggle;
+import java.util.ArrayList;
+import java.util.List;
 
+import models.Module;
+
+public class ModuleListActivity extends BaseActivity {
+    List<Module> moduleList = new ArrayList<Module>();
+
+    RecyclerView recyclerViewModule;
+    ModuleAdapter moduleAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_module_list);
 
-        setSupportActionBar(findViewById(R.id.myToolBar));
-
-        drawerLayout = findViewById(R.id.activity_main_drawer);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
-        //Make burger menu appears
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        //Disabled default title name for app
-        getSupportActionBar().setTitle(null);
-
-        NavigationView navigationView = findViewById(R.id.vertical_navigation);
-        //Set listener for selected items on the vertical navigation bar
-        navigationView.setNavigationItemSelectedListener(this);
-
+        super.onCreateDrawer();
+        recyclerViewModule=findViewById(R.id.recycleViewModule);
+        setRecycleView();
 
     }
+    private void setRecycleView(){
+        moduleList.add(new Module(1,"SWD391", "Software architecture", "nguyendinhvinh@gmail.com"));
+        moduleList.add(new Module(1,"SWD391", "Software architecture", "lanltt@gmail.com"));
+        moduleList.add(new Module(1,"SWD391", "Software architecture", "vohongkhanh@gmail.com"));
 
-    @Override
-    protected void onPostCreate(Bundle saveInstanceState){
-        super.onPostCreate(saveInstanceState);
-        //Sync the toggle state after onRestoreInstanceState has occured
-        drawerToggle.syncState();
+        moduleAdapter= new ModuleAdapter(this,moduleList);
+        RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(getApplicationContext());
+        recyclerViewModule.setLayoutManager(layoutManager);
+        recyclerViewModule.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewModule.setAdapter(moduleAdapter);
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig){
-        super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        if(drawerToggle.onOptionsItemSelected(item)){
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    //Set actions for individual item in the drawer
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        switch(id){
-            case R.id.nav_view_exam_schedule:
-                Toast.makeText(this, "Go to exam schedule", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.nav_mark_report:
-                Toast.makeText(this, "Go to mark report", Toast.LENGTH_SHORT).show();
-                break;
-        }
-
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    //Allow using back button to close drawer
-    @Override
-    public void onBackPressed(){
-        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
-            drawerLayout.closeDrawer(GravityCompat.START);
-        }else {
-            super.onBackPressed();
-        }
-    }
 
 }
