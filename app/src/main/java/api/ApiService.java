@@ -11,6 +11,7 @@ import models.AccessToken;
 import models.ExamSchedule;
 import models.LoginBody;
 import models.MarkReport;
+import models.ModuleResponse;
 import models.ResponseDTO;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -44,6 +45,8 @@ public interface ApiService {
     @GET("Exam/{studentId}")
     Call<ExamSchedule> getSchedule(@Path("studentId") String studentId);
 
+    @GET("Module/{studentId}")
+    Call<ModuleResponse> moduleGetByStudentId(@Path("studentId") int studentId, @Query("pageSize")int pageSize);
 
 
 
