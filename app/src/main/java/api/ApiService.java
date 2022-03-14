@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.AccessToken;
+import models.ExamSchedule;
 import models.LoginBody;
 import models.MarkReport;
 import models.ModuleResponse;
@@ -40,6 +41,9 @@ public interface ApiService {
 
     @GET("student/markReport/{studentId}/{moduleId}")
     Call<List<MarkReport>> markReportGet(@Path("studentId") int studentId,@Path("moduleId") int moduleId);
+
+    @GET("Exam/{studentId}")
+    Call<ExamSchedule> getSchedule(@Path("studentId") String studentId);
 
     @GET("Module/{studentId}")
     Call<ModuleResponse> moduleGetByStudentId(@Path("studentId") int studentId, @Query("pageSize")int pageSize);

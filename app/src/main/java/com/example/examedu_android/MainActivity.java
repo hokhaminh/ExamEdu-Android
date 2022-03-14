@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.examedu_android.module_list.ModuleListActivity;
 import com.google.gson.JsonObject;
 
 import Token.TokenManager;
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
 
         if(tokenManager.getToken().getAccessToken() != null){
-            startActivity(new Intent(MainActivity.this, ModuleListActivity.class));
+            startActivity(new Intent(MainActivity.this, ExamScheduleActivity.class));
             finish();
         }
 
@@ -75,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     tokenManager.saveToken(response.body());
 
                     Toast.makeText(MainActivity.this,"dung roi",Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, ModuleListActivity.class));
+                    startActivity(new Intent(MainActivity.this, ExamScheduleActivity.class));
                     finish();
 
                 }
