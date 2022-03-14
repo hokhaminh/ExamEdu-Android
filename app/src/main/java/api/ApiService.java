@@ -10,6 +10,7 @@ import java.util.List;
 import models.AccessToken;
 import models.LoginBody;
 import models.MarkReport;
+import models.ModuleResponse;
 import models.ResponseDTO;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -40,6 +41,8 @@ public interface ApiService {
     @GET("student/markReport/{studentId}/{moduleId}")
     Call<List<MarkReport>> markReportGet(@Path("studentId") int studentId,@Path("moduleId") int moduleId);
 
+    @GET("Module/{studentId}")
+    Call<ModuleResponse> moduleGetByStudentId(@Path("studentId") int studentId, @Query("pageSize")int pageSize);
 
 
 

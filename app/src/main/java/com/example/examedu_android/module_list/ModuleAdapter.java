@@ -19,11 +19,12 @@ import com.example.examedu_android.mark_report_folder.MarkReportAdapter;
 import java.util.List;
 
 import models.Module;
+import models.ModuleResponse;
 
 public class ModuleAdapter extends  RecyclerView.Adapter<ModuleAdapter.ModuleViewHolder> {
-    List<Module> moduleList;
+    List<ModuleResponse.Module> moduleList;
     Context Context;
-    public ModuleAdapter(Context context, List<Module> moduleList) {
+    public ModuleAdapter(Context context, List<ModuleResponse.Module> moduleList) {
         this.moduleList = moduleList;
         notifyDataSetChanged();
         Context=context;
@@ -41,7 +42,7 @@ public class ModuleAdapter extends  RecyclerView.Adapter<ModuleAdapter.ModuleVie
 
     @Override
     public void onBindViewHolder(@NonNull ModuleViewHolder holder, int position) {
-        Module module = moduleList.get(position);
+        ModuleResponse.Module module = moduleList.get(position);
         if(module==null){
             return;
         }

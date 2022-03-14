@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
 
         if(tokenManager.getToken().getAccessToken() != null){
-            startActivity(new Intent(MainActivity.this, PostActivity.class));
+            startActivity(new Intent(MainActivity.this, ModuleListActivity.class));
             finish();
         }
 
