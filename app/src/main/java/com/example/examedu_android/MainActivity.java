@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
 
         if(tokenManager.getToken().getAccessToken() != null){
-            startActivity(new Intent(MainActivity.this, PostActivity.class));
+            startActivity(new Intent(MainActivity.this, ExamScheduleActivity.class));
             finish();
         }
 
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     tokenManager.saveToken(response.body());
 
                     Toast.makeText(MainActivity.this,"dung roi",Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(MainActivity.this, PostActivity.class));
+                    startActivity(new Intent(MainActivity.this, ExamScheduleActivity.class));
                     finish();
 
                 }

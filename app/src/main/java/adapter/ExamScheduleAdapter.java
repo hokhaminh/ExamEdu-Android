@@ -1,5 +1,8 @@
 package adapter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.examedu_android.R;
+import com.example.examedu_android.TestActivity;
 
 import org.w3c.dom.Text;
 
@@ -23,11 +27,12 @@ import models.ExamSchedule;
 
 public class ExamScheduleAdapter extends RecyclerView.Adapter<ExamScheduleAdapter.ExamScheduleViewHolder> {
     private List<ExamSchedule.Exam> mExamScheduleList;
-
+    private Context mContext;
     Calendar calendar;
     SimpleDateFormat simpleDateFormat;
     String dateTime;
-    public ExamScheduleAdapter(List<ExamSchedule.Exam> mExamScheduleList) {
+    public ExamScheduleAdapter(Context context, List<ExamSchedule.Exam> mExamScheduleList) {
+        this.mContext = context;
         this.mExamScheduleList = mExamScheduleList;
     }
 
@@ -57,7 +62,7 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<ExamScheduleAdapte
         String finalHour = sdfSource.format(date);
         holder.hour.setText(finalHour);
 
-        sdfSource = new SimpleDateFormat("DD-MMMM");
+        sdfSource = new SimpleDateFormat("dd-MMMM");
         String finalDate = sdfSource.format(date);
 
         holder.dateTime.setText(finalDate);
@@ -65,7 +70,19 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<ExamScheduleAdapte
         holder.description.setText(examSchedule.getDescription());
         holder.moduleName.setText(examSchedule.getModuleCode());
         holder.duration.setText(String.valueOf(examSchedule.getDurationInMinute())+" minutes");
+        holder.btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickGoToExam(examSchedule.getExamId());
+            }
+        });
 
+    }
+
+    private void onClickGoToExam(String examId) {
+        Intent intent = new Intent(mContext, TestActivity.class);
+        intent.putExtra("examId",examId);
+        mContext.startActivity(intent);
     }
 
     @Override
@@ -93,7 +110,7 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<ExamScheduleAdapte
             moduleName = itemView.findViewById(R.id.tvModuleName);
             duration = itemView.findViewById(R.id.tvDuration);
             dateTime = itemView.findViewById(R.id.tvDateTime);
-
+            btnStart = itemView.findViewById(R.id.btnStart);
         }
     }
 }
