@@ -1,14 +1,11 @@
 package com.example.examedu_android;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +14,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.JsonObject;
 
 import Token.TokenManager;
 import api.ApiService;
@@ -117,7 +113,9 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
         switch(id){
             case R.id.nav_view_exam_schedule:
-                Toast.makeText(this, "Go to exam schedule", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Go to exam schedule", Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(this,ExamQuestionsActivity.class);
+                startActivity(intent);
                 break;
             case R.id.nav_mark_report:
                 Intent i = new Intent(this, mark_report.class);
