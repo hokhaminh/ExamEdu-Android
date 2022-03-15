@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.examedu_android.module_list.ModuleListActivity;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -35,7 +36,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
 
     protected void onCreateDrawer() {
 //        super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_post);
+//        setContentView(R.layout.activity_post);
         setSupportActionBar(findViewById(R.id.myToolBar));
         getSupportActionBar().setTitle(null);
 
@@ -118,8 +119,8 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent);
                 break;
             case R.id.nav_mark_report:
-                Intent i = new Intent(this, mark_report.class);
-                startActivity(i);
+                startActivity(new Intent(this, ModuleListActivity.class));
+                finish();
                 break;
         }
 

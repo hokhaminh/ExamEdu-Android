@@ -13,17 +13,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ExamEduAndroid">
         <activity
-            android:name=".ExamQuestionsActivity"
+            android:name=".TestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ExamScheduleActivity"
             android:exported="false" />
         <activity
             android:name=".mark_report"
             android:exported="false" />
         <activity
+            android:name=".module_list.ModuleListActivity"
+            android:exported="false" />
+        <activity
             android:name=".PostActivity"
             android:exported="false" />
-<!--        <activity-->
-<!--            android:name=".authentication.Login"-->
-<!--            android:exported="false" />-->
+        <activity
+            android:name=".authentication.Login"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
