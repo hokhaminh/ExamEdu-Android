@@ -51,7 +51,7 @@ public class AnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         sharedPreferences = context.getSharedPreferences("answerChecked", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         try {
-            selectedPosition = sharedPreferences.getInt(Integer.toString(currentQuestionIndex), -1);
+            selectedPosition = sharedPreferences.getInt(Integer.toString(currentQuestionIndex), 0);
         } catch (Exception e) {
         }
 
