@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.example.examedu_android.exam.SubmitExamActivity;
 import com.example.examedu_android.module_list.ModuleListActivity;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.navigation.NavigationView;
@@ -121,7 +122,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 Toast.makeText(this, "Go to exam schedule", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_mark_report:
-                startActivity(new Intent(this, ModuleListActivity.class));
+                startActivity(new Intent(this, SubmitExamActivity.class));
                 finish();
                 break;
         }
