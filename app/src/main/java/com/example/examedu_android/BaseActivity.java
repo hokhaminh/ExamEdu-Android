@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -33,10 +34,12 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     private ActionBarDrawerToggle drawerToggle;
 
     private ShapeableImageView shut_down_icon;
+    NavigationView navigationView;
 
     private ApiService apiService;
     private TokenManager tokenManager2;
     Call<ResponseDTO> call_logout;
+    static protected int selectedItemId;
 
     protected void onCreateDrawer() {
 //        super.onCreate(savedInstanceState);
@@ -45,12 +48,22 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setTitle(null);
 
         drawerLayout = findViewById(R.id.activity_main_drawer);
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close);
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.drawer_open, R.string.drawer_close)
+        {
+            //Added to try and fix the unclickable problem
+            public void onDrawerOpened(View drawerView)
+            {
+                findViewById(R.id.nav_mark_report).bringToFront();
+                findViewById(R.id.nav_view_exam_schedule).bringToFront();
+//                drawerView.bringToFront();
+                drawerLayout.requestLayout();
+            }
+        };
         //Make burger menu appears
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        NavigationView navigationView = findViewById(R.id.vertical_navigation);
+        navigationView = findViewById(R.id.vertical_navigation);
         //Set listener for selected items on the vertical navigation bar
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -88,8 +101,28 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                     });
             }
         });
+
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        super.onPrepareOptionsMenu(menu);
+        //recreate navigationView's menu, uncheck all item and set new checked item
+        navigationView.getMenu().clear();
+        navigationView.inflateMenu(R.menu.activity_main_drawer);
+        //set checked false to everything
+        navigationView.getMenu().findItem(R.id.nav_view_exam_schedule).setChecked(false);
+        navigationView.getMenu().findItem(R.id.nav_mark_report).setChecked(false);
+
+        if(selectedItemId == 0)
+        {
+            selectedItemId = R.id.nav_view_exam_schedule;
+        }
+        navigationView.setCheckedItem(selectedItemId);
+
+        return true;
+    }
 
     @Override
     protected void onPostCreate(Bundle saveInstanceState){
@@ -116,9 +149,10 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
+        selectedItemId = id;
         switch(id){
             case R.id.nav_view_exam_schedule:
-                Toast.makeText(this, "Go to exam schedule", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, ExamScheduleActivity.class));
                 break;
             case R.id.nav_mark_report:
                 startActivity(new Intent(this, ModuleListActivity.class));
@@ -139,5 +173,6 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+
 
 }
