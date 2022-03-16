@@ -16,6 +16,12 @@
             android:name=".exam.SubmitExamActivity"
             android:exported="false" />
         <activity
+            android:name=".TestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ExamScheduleActivity"
+            android:exported="false" />
+        <activity
             android:name=".mark_report"
             android:exported="false" />
         <activity

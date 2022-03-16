@@ -1,6 +1,7 @@
 package com.example.examedu_android.mark_report_folder;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,10 @@ public class MarkReportAdapter extends RecyclerView.Adapter<MarkReportAdapter.Ma
         holder.examName.setText(markReport.getExamName());
         holder.comment.setText(markReport.getComment());
         holder.mark.setText(String.valueOf(markReport.getMark()));
+        if(markReport.getMark() < 5){
+            holder.mark.setBackgroundColor(Color.rgb(201, 34, 34));
+            holder.mark.setTextColor(Color.rgb(255, 255, 255));
+        }
         holder.markProgress.setProgress(Math.round(markReport.getMark()*10));
     }
 
