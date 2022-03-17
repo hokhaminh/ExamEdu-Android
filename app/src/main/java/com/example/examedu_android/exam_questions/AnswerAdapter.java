@@ -20,20 +20,23 @@ import com.example.examedu_android.R;
 import java.util.List;
 
 import models.Answer;
+import models.QuestionAnswer;
 
 public class AnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
+    private QuestionAnswer questionAnswer;
     private List<Answer> answerList;
     private int currentQuestionIndex;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private int selectedPosition;
 
-    public AnswerAdapter(Context context, List<Answer> answerList, int currentQuestionIndex) {
+    public AnswerAdapter(Context context, QuestionAnswer questionAnswer, int currentQuestionIndex) {
         this.context = context;
-        this.answerList = answerList;
+        this.questionAnswer = questionAnswer;
         this.currentQuestionIndex = currentQuestionIndex;
+        answerList = questionAnswer.getAnswers();
     }
 
     @Override
@@ -51,7 +54,7 @@ public class AnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         sharedPreferences = context.getSharedPreferences("answerChecked", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         try {
-            selectedPosition = sharedPreferences.getInt(Integer.toString(currentQuestionIndex), 0);
+            selectedPosition = sharedPreferences.getInt("QuestIndex " + Integer.toString(currentQuestionIndex), 0);
         } catch (Exception e) {
         }
 
@@ -83,7 +86,8 @@ public class AnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     selectedPosition = Integer.parseInt(view.getTag().toString());
-                    editor.putInt(Integer.toString(currentQuestionIndex), selectedPosition);
+                    editor.putInt("QuestIndex " + Integer.toString(currentQuestionIndex), selectedPosition);
+                    editor.putString(Integer.toString(questionAnswer.getExamQuestionId()), Integer.toString(answerList.get(selectedPosition).getAnswerId()));
                     editor.commit();
                     notifyDataSetChanged();
                 }
@@ -94,7 +98,8 @@ public class AnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     selectedPosition = Integer.parseInt(view.getTag().toString());
-                    editor.putInt(Integer.toString(currentQuestionIndex), selectedPosition);
+                    editor.putInt("QuestIndex " + Integer.toString(currentQuestionIndex), selectedPosition);
+                    editor.putString(Integer.toString(questionAnswer.getExamQuestionId()), Integer.toString(answerList.get(selectedPosition).getAnswerId()));
                     editor.commit();
                     notifyDataSetChanged();
                 }
@@ -115,7 +120,8 @@ public class AnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                 @Override
                 public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    editor.putString(Integer.toString(currentQuestionIndex), inputAnswerViewHolder.edtAnswer.getText().toString());
+                    editor.putString("QuestIndex " + Integer.toString(currentQuestionIndex), inputAnswerViewHolder.edtAnswer.getText().toString());
+                    editor.putString(Integer.toString(questionAnswer.getExamQuestionId()), inputAnswerViewHolder.edtAnswer.getText().toString());
                     editor.commit();
                 }
 
