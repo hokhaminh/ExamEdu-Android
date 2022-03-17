@@ -40,7 +40,7 @@ public class ExamQuestionsActivity extends AppCompatActivity {
     Button btnFinish;
     CountDownTimer countDownTimer;
     long timeLeftInMilliseconds;
-    int currentQuestionIndex = 0, numberOfColumns;
+    int currentQuestionIndex = 0, numberOfColumns, selectedItem = 0, lastSelectedItem = 0;
     int[] questionsNum;
     SharedPreferences sharedPreferences;
 
@@ -58,8 +58,10 @@ public class ExamQuestionsActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("answerChecked", MODE_PRIVATE);
 
+        Bundle extras = getIntent().getExtras();
+        String examId = extras.getString("examId");
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
-        call = service.examQuestionGet(26, Integer.parseInt(tokenManager.getToken().getAccountId()));
+        call = service.examQuestionGet(Integer.parseInt(examId), Integer.parseInt(tokenManager.getToken().getAccountId()));
         call.enqueue(new Callback<ExamQuestion>() {
             @Override
             public void onResponse(Call<ExamQuestion> call, Response<ExamQuestion> response) {
@@ -78,7 +80,7 @@ public class ExamQuestionsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ExamQuestion> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "sai roi", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
@@ -94,6 +96,8 @@ public class ExamQuestionsActivity extends AppCompatActivity {
         btnPrev = findViewById(R.id.btn_prev);
         btnNext = findViewById(R.id.btn_next);
         btnFinish = findViewById(R.id.btn_finish);
+        QuestionNumAdapter.selectedItem = 0;
+        QuestionNumAdapter.lastSelectedItem = 0;
     }
 
     private void setView() {
@@ -126,15 +130,17 @@ public class ExamQuestionsActivity extends AppCompatActivity {
         timeLeftInMilliseconds = examQuestion.getDurationInMinute() * 60000;
         startTimer();
 
+        selectedItem = questionNumAdapter.selectedItem;
+        lastSelectedItem = questionNumAdapter.lastSelectedItem;
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (currentQuestionIndex < examQuestion.getQuestionAnswer().size() - 1) {
                     currentQuestionIndex = currentQuestionIndex + 1;
-                    questionNumAdapter.lastSelectedItem = questionNumAdapter.selectedItem;
-                    questionNumAdapter.selectedItem = currentQuestionIndex;
-                    questionNumAdapter.notifyItemChanged(questionNumAdapter.lastSelectedItem);
-                    questionNumAdapter.notifyItemChanged(questionNumAdapter.selectedItem);
+                    lastSelectedItem = selectedItem;
+                    selectedItem = currentQuestionIndex;
+                    questionNumAdapter.notifyItemChanged(lastSelectedItem);
+                    questionNumAdapter.notifyItemChanged(selectedItem);
 
                     //The last question
                     if (currentQuestionIndex == examQuestion.getQuestionAnswer().size() - 1) {
@@ -153,10 +159,10 @@ public class ExamQuestionsActivity extends AppCompatActivity {
                 if (currentQuestionIndex > 0) {
                     btnNext.setEnabled(true);
                     currentQuestionIndex = (currentQuestionIndex - 1) % examQuestion.getQuestionAnswer().size();
-                    questionNumAdapter.lastSelectedItem = questionNumAdapter.selectedItem;
-                    questionNumAdapter.selectedItem = currentQuestionIndex;
-                    questionNumAdapter.notifyItemChanged(questionNumAdapter.lastSelectedItem);
-                    questionNumAdapter.notifyItemChanged(questionNumAdapter.selectedItem);
+                    lastSelectedItem = selectedItem;
+                    selectedItem = currentQuestionIndex;
+                    questionNumAdapter.notifyItemChanged(lastSelectedItem);
+                    questionNumAdapter.notifyItemChanged(selectedItem);
                     updateQuestion();
                 }
             }
