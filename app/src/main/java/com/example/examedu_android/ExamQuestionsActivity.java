@@ -19,10 +19,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.examedu_android.exam_questions.AnswerAdapter;
 import com.example.examedu_android.exam_questions.QuestionNumAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Token.TokenManager;
 import api.ApiService;
 import api.CheckToken;
 import models.ExamQuestion;
+import models.StudentAnswerInput;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,9 +44,12 @@ public class ExamQuestionsActivity extends AppCompatActivity {
     Button btnFinish;
     CountDownTimer countDownTimer;
     long timeLeftInMilliseconds;
-    int currentQuestionIndex = 0, numberOfColumns, selectedItem = 0, lastSelectedItem = 0;
+    int currentQuestionIndex = 0, numberOfColumns;
     int[] questionsNum;
+    int studentId, examId;
+    List<StudentAnswerInput> answerInputList = new ArrayList<>();
     SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +64,13 @@ public class ExamQuestionsActivity extends AppCompatActivity {
         }
 
         sharedPreferences = getSharedPreferences("answerChecked", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
 
         Bundle extras = getIntent().getExtras();
-        String examId = extras.getString("examId");
+        examId = Integer.parseInt(extras.getString("examId"));
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs", MODE_PRIVATE));
-        call = service.examQuestionGet(Integer.parseInt(examId), Integer.parseInt(tokenManager.getToken().getAccountId()));
+        studentId = Integer.parseInt(tokenManager.getToken().getAccountId());
+        call = service.examQuestionGet(examId, studentId);
         call.enqueue(new Callback<ExamQuestion>() {
             @Override
             public void onResponse(Call<ExamQuestion> call, Response<ExamQuestion> response) {
@@ -80,7 +89,7 @@ public class ExamQuestionsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<ExamQuestion> call, Throwable t) {
-
+                Toast.makeText(getApplicationContext(), "Cannot request data", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -130,17 +139,15 @@ public class ExamQuestionsActivity extends AppCompatActivity {
         timeLeftInMilliseconds = examQuestion.getDurationInMinute() * 60000;
         startTimer();
 
-        selectedItem = questionNumAdapter.selectedItem;
-        lastSelectedItem = questionNumAdapter.lastSelectedItem;
         btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (currentQuestionIndex < examQuestion.getQuestionAnswer().size() - 1) {
                     currentQuestionIndex = currentQuestionIndex + 1;
-                    lastSelectedItem = selectedItem;
-                    selectedItem = currentQuestionIndex;
-                    questionNumAdapter.notifyItemChanged(lastSelectedItem);
-                    questionNumAdapter.notifyItemChanged(selectedItem);
+                    QuestionNumAdapter.lastSelectedItem = QuestionNumAdapter.selectedItem;
+                    QuestionNumAdapter.selectedItem = currentQuestionIndex;
+                    questionNumAdapter.notifyItemChanged(QuestionNumAdapter.lastSelectedItem);
+                    questionNumAdapter.notifyItemChanged(QuestionNumAdapter.selectedItem);
 
                     //The last question
                     if (currentQuestionIndex == examQuestion.getQuestionAnswer().size() - 1) {
@@ -159,10 +166,10 @@ public class ExamQuestionsActivity extends AppCompatActivity {
                 if (currentQuestionIndex > 0) {
                     btnNext.setEnabled(true);
                     currentQuestionIndex = (currentQuestionIndex - 1) % examQuestion.getQuestionAnswer().size();
-                    lastSelectedItem = selectedItem;
-                    selectedItem = currentQuestionIndex;
-                    questionNumAdapter.notifyItemChanged(lastSelectedItem);
-                    questionNumAdapter.notifyItemChanged(selectedItem);
+                    QuestionNumAdapter.lastSelectedItem = QuestionNumAdapter.selectedItem;
+                    QuestionNumAdapter.selectedItem = currentQuestionIndex;
+                    questionNumAdapter.notifyItemChanged(QuestionNumAdapter.lastSelectedItem);
+                    questionNumAdapter.notifyItemChanged(QuestionNumAdapter.selectedItem);
                     updateQuestion();
                 }
             }
@@ -171,7 +178,21 @@ public class ExamQuestionsActivity extends AppCompatActivity {
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //SUBMIT EXAM TẠI ĐÂY
+                for (int i = 0; i < examQuestion.getQuestionAnswer().size(); i++) {
+                    answerInputList.add(new StudentAnswerInput(
+                            sharedPreferences.getString(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()), ""),
+                            studentId,
+                            examQuestion.getQuestionAnswer().get(i).getExamQuestionId()
+                    ));
+                }
+
+                //SUBMIT EXAM TẠI ĐÂY (đã có đầy đủ 3 biến examId, studentId, answerInputList chỉ cần gọi lại đúng tên là xài được)
+
+                //Dời những dòng dưới vào chỗ sau khi submit exam và chấm điểm thành công
+                for (int i = 0; i < examQuestion.getQuestionAnswer().size(); i++) {
+                    editor.remove(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()));
+                }
+                editor.commit();
             }
         });
     }
@@ -186,7 +207,21 @@ public class ExamQuestionsActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                //SUBMIT EXAM TẠI ĐÂY
+                for (int i = 0; i < examQuestion.getQuestionAnswer().size(); i++) {
+                    answerInputList.add(new StudentAnswerInput(
+                            sharedPreferences.getString(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()), ""),
+                            studentId,
+                            examQuestion.getQuestionAnswer().get(i).getExamQuestionId()
+                    ));
+                }
+
+                //SUBMIT EXAM TẠI ĐÂY (đã có đầy đủ 3 biến examId, studentId, answerInputList chỉ cần gọi lại đúng tên là xài được)
+
+                //Dời những dòng dưới vào chỗ sau khi submit exam và chấm điểm thành công
+                for (int i = 0; i < examQuestion.getQuestionAnswer().size(); i++) {
+                    editor.remove(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()));
+                }
+                editor.commit();
             }
         }.start();
     }
@@ -210,7 +245,7 @@ public class ExamQuestionsActivity extends AppCompatActivity {
         tvQuestionNum.setText("Question " + (currentQuestionIndex + 1));
         tvQuestion.setText(examQuestion.getQuestionAnswer().get(currentQuestionIndex).getQuestionContent());
 
-        AnswerAdapter answerAdapter = new AnswerAdapter(this, examQuestion.getQuestionAnswer().get(currentQuestionIndex).getAnswers(), currentQuestionIndex);
+        AnswerAdapter answerAdapter = new AnswerAdapter(this, examQuestion.getQuestionAnswer().get(currentQuestionIndex), currentQuestionIndex);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rcvAnswer.setLayoutManager(linearLayoutManager);
         rcvAnswer.setAdapter(answerAdapter);
