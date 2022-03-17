@@ -14,6 +14,7 @@ import models.LoginBody;
 import models.MarkReport;
 import models.ModuleResponse;
 import models.ResponseDTO;
+import models.StudentAnswerInput;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -50,6 +51,9 @@ public interface ApiService {
 
     @GET("Module/{studentId}")
     Call<ModuleResponse> moduleGetByStudentId(@Path("studentId") int studentId, @Query("pageSize")int pageSize);
+    
+    @POST("Answer/PT")
+    Call<ResponseDTO> submitExam(@Query("examId") int examId, @Query("studentId")int studentId, @Body List<StudentAnswerInput> answerInputs);
 
 
 
