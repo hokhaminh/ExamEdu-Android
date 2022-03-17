@@ -19,6 +19,9 @@
             android:name=".TestActivity"
             android:exported="false" />
         <activity
+            android:name=".ExamQuestionsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ExamScheduleActivity"
             android:exported="false" />
         <activity
