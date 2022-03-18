@@ -90,7 +90,7 @@
 
                     <TextView
                         android:id="@+id/tvDuration"
-                        android:layout_width="82dp"
+                        android:layout_width="111dp"
                         android:layout_height="wrap_content"
                         android:text="TextView"
                         android:textColor="#3D5AF1" />

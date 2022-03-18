@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
                     tokenManager.saveToken(response.body());
 
-                    Toast.makeText(MainActivity.this,"dung roi",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this,"dung roi",Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(MainActivity.this, ExamScheduleActivity.class));
                     finish();
 
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<AccessToken> call, Throwable t) {
-                Toast.makeText(MainActivity.this,"sai roi",Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this,"Wrong password or email",Toast.LENGTH_SHORT).show();
             }
         });
 
