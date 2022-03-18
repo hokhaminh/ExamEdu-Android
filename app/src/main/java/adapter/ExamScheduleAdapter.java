@@ -145,7 +145,7 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<ExamScheduleAdapte
         intent.putExtra("examId",examId);
         mContext.startActivity(intent);
     }
-
+    //test
     @Override
     public int getItemCount() {
         if(mExamScheduleList != null){
