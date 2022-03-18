@@ -45,12 +45,11 @@ public class ExamScheduleActivity extends BaseActivity {
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs",MODE_PRIVATE));
 
         String accountID=tokenManager.getToken().getAccountId().toString();
-        call = service.getSchedule(accountID);
+        call = service.getSchedule(accountID,100);
 
         call.enqueue(new Callback<ExamSchedule>() {
             @Override
             public void onResponse(Call<ExamSchedule> call, Response<ExamSchedule> response) {
-                Toast.makeText(ExamScheduleActivity.this,"response" + response.body(),Toast.LENGTH_SHORT).show();
                 examSchedule = response.body();
 
                 rcvExam = findViewById(R.id.rcv_exam);
