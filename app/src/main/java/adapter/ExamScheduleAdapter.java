@@ -19,8 +19,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.examedu_android.ExamQuestionsActivity;
 import com.example.examedu_android.R;
-import com.example.examedu_android.TestActivity;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -141,7 +141,7 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<ExamScheduleAdapte
 
 
     private void goToExam(String examId) {
-        Intent intent = new Intent(mContext, TestActivity.class);
+        Intent intent = new Intent(mContext, ExamQuestionsActivity.class);
         intent.putExtra("examId",examId);
         mContext.startActivity(intent);
     }
