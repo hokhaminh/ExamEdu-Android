@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.examedu_android.exam.SubmitExamActivity;
 import com.example.examedu_android.exam_questions.AnswerAdapter;
 import com.example.examedu_android.exam_questions.QuestionNumAdapter;
 import com.example.examedu_android.module_list.ModuleListActivity;
@@ -185,11 +184,16 @@ public class ExamQuestionsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 for (int i = 0; i < examQuestion.getQuestionAnswer().size(); i++) {
-                    answerInputList.add(new StudentAnswerInput(
-                            sharedPreferences.getString(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()), ""),
-                            studentId,
-                            examQuestion.getQuestionAnswer().get(i).getExamQuestionId()
-                    ));
+                    String answer = sharedPreferences.getString(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()), "");
+                    if(answer!="") {
+                        answerInputList.add(new StudentAnswerInput(
+                                answer,
+                                studentId,
+                                examQuestion.getQuestionAnswer().get(i).getExamQuestionId()
+                        ));
+                    }else{
+                        continue;
+                    }
                 }
 
                 //SUBMIT EXAM TẠI ĐÂY (đã có đầy đủ 3 biến examId, studentId, answerInputList chỉ cần gọi lại đúng tên là xài được)
