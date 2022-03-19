@@ -208,11 +208,16 @@ public class ExamQuestionsActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 for (int i = 0; i < examQuestion.getQuestionAnswer().size(); i++) {
-                    answerInputList.add(new StudentAnswerInput(
-                            sharedPreferences.getString(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()), ""),
-                            studentId,
-                            examQuestion.getQuestionAnswer().get(i).getExamQuestionId()
-                    ));
+                    String answer = sharedPreferences.getString(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()), "");
+                    if(answer!=null) {
+                        answerInputList.add(new StudentAnswerInput(
+                                answer,
+                                studentId,
+                                examQuestion.getQuestionAnswer().get(i).getExamQuestionId()
+                        ));
+                    }else{
+                        continue;
+                    }
                 }
 
                 //SUBMIT EXAM TẠI ĐÂY (đã có đầy đủ 3 biến examId, studentId, answerInputList chỉ cần gọi lại đúng tên là xài được)
