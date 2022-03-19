@@ -8,11 +8,17 @@ import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonObject;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import Token.TokenManager;
@@ -31,12 +37,20 @@ public class ExamScheduleActivity extends BaseActivity {
     TokenManager tokenManager;
     Call<ExamSchedule> call;
     ExamSchedule examSchedule;
+    TextView today;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam_schedule);
         super.onCreateDrawer();
+        //get current date
+
+        SimpleDateFormat sdfSource = new SimpleDateFormat("EEEE, d MMMM yyyy");
+        String date = sdfSource.format(Calendar.getInstance().getTime());
+
+        today = findViewById(R.id.tvToday);
+        today.setText(date);
 
         service = CheckToken.check(this);
         if(service == null){
@@ -45,12 +59,11 @@ public class ExamScheduleActivity extends BaseActivity {
         tokenManager = TokenManager.getInstance(getSharedPreferences("prefs",MODE_PRIVATE));
 
         String accountID=tokenManager.getToken().getAccountId().toString();
-        call = service.getSchedule(accountID);
+        call = service.getSchedule(accountID,100);
 
         call.enqueue(new Callback<ExamSchedule>() {
             @Override
             public void onResponse(Call<ExamSchedule> call, Response<ExamSchedule> response) {
-                Toast.makeText(ExamScheduleActivity.this,"response" + response.body(),Toast.LENGTH_SHORT).show();
                 examSchedule = response.body();
 
                 rcvExam = findViewById(R.id.rcv_exam);

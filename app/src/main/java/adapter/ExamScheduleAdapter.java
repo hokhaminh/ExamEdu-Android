@@ -1,14 +1,22 @@
 package adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.examedu_android.ExamQuestionsActivity;
@@ -19,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import models.ExamSchedule;
 
@@ -40,6 +49,7 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<ExamScheduleAdapte
         return new ExamScheduleViewHolder(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onBindViewHolder(@NonNull ExamScheduleViewHolder holder, int position) {
         ExamSchedule.Exam examSchedule = mExamScheduleList.get(position);
@@ -62,26 +72,80 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<ExamScheduleAdapte
         sdfSource = new SimpleDateFormat("dd-MMMM");
         String finalDate = sdfSource.format(date);
 
+        //get current daytime
+        Date now = new Date();
+//        String examDate = sdfSource.format(dateTime);
+
         holder.dateTime.setText(finalDate);
         holder.testName.setText((examSchedule.getExamName()));
         holder.description.setText(examSchedule.getDescription());
         holder.moduleName.setText(examSchedule.getModuleCode());
         holder.duration.setText(String.valueOf(examSchedule.getDurationInMinute())+" minutes");
+
+        long diffInMillies = now.getTime() - date.getTime();
+        long diff = TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+        if(diff > 10){
+            holder.btnStart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
+            holder.btnStart.setText("Ended");
+            holder.btnStart.setTextColor(Color.parseColor("#ffffff"));
+            holder.btnStart.setEnabled(false);
+
+        }else if(date.after(now)){
+            holder.btnStart.setEnabled(false);
+        }
         holder.btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickGoToExam(examSchedule.getExamId());
+
+                checkPassword(examSchedule.getPassword(), new DialogSingleButtonListener() {
+                    @Override
+                    public void onButtonClicked(DialogInterface dialog) {
+                        //neu nhap dung password
+                        goToExam(examSchedule.getExamId());
+                    }
+                });
             }
         });
 
+
+    }
+    private void checkPassword(String password, final DialogSingleButtonListener dialogSingleButtonListener) {
+//        final boolean[] check = new boolean[1];
+        AlertDialog.Builder b = new AlertDialog.Builder(this.mContext);
+        final EditText editText = new EditText(mContext);
+
+        b.setTitle("Password")
+                .setView(editText)
+                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(mContext, "Confirm", Toast.LENGTH_SHORT).show();
+                        String passwordInput =editText.getText().toString();
+                        if( passwordInput.equals(password)){
+                            dialogSingleButtonListener.onButtonClicked(dialogInterface);
+                        }
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        b.setCancelable(true);
+                    }
+                });
+
+        AlertDialog dialog = b.create();
+        dialog.show();
     }
 
-    private void onClickGoToExam(String examId) {
+
+    private void goToExam(String examId) {
         Intent intent = new Intent(mContext, ExamQuestionsActivity.class);
         intent.putExtra("examId",examId);
         mContext.startActivity(intent);
     }
-
+    //test
     @Override
     public int getItemCount() {
         if(mExamScheduleList != null){
@@ -98,9 +162,13 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<ExamScheduleAdapte
         private TextView duration;
         private TextView dateTime;
         private Button btnStart;
+        private EditText passwordtv;
+        private Button btnConfirm;
+        private Button btnCancel;
 
         public ExamScheduleViewHolder(@NonNull View itemView) {
             super(itemView);
+
             hour = itemView.findViewById(R.id.tvHour);
             testName = itemView.findViewById(R.id.tvTestName);
             description = itemView.findViewById(R.id.tvDescription);
@@ -108,6 +176,12 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<ExamScheduleAdapte
             duration = itemView.findViewById(R.id.tvDuration);
             dateTime = itemView.findViewById(R.id.tvDateTime);
             btnStart = itemView.findViewById(R.id.btnStart);
+            passwordtv = itemView.findViewById(R.id.passwordTv);
+//            btnConfirm = itemView.findViewById(R.id.btnConfirm);
+//            btnCancel = itemView.findViewById(R.id.btnCancel);
         }
+    }
+    public interface DialogSingleButtonListener {
+        public abstract void onButtonClicked(DialogInterface dialog);
     }
 }

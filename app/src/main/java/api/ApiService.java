@@ -47,7 +47,7 @@ public interface ApiService {
     @GET("ExamQuestions/{examId}")
     Call<ExamQuestion> examQuestionGet(@Path("examId") int examId, @Query("studentId") int studentId);
     @GET("Exam/{studentId}")
-    Call<ExamSchedule> getSchedule(@Path("studentId") String studentId);
+    Call<ExamSchedule> getSchedule(@Path("studentId") String studentId, @Query("pageSize")int pageSize);
 
     @GET("Module/{studentId}")
     Call<ModuleResponse> moduleGetByStudentId(@Path("studentId") int studentId, @Query("pageSize")int pageSize);
