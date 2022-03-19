@@ -236,6 +236,7 @@ public class ExamQuestionsActivity extends AppCompatActivity {
 
                                                             //Dời những dòng dưới vào chỗ sau khi submit exam và chấm điểm thành công
                                                             for (int i = 0; i < examQuestion.getQuestionAnswer().size(); i++) {
+                                                                editor.remove("QuestIndex " + i);
                                                                 editor.remove(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()));
                                                             }
                                                             editor.commit();
@@ -323,6 +324,7 @@ public class ExamQuestionsActivity extends AppCompatActivity {
 
                                                             //Dời những dòng dưới vào chỗ sau khi submit exam và chấm điểm thành công
                                                             for (int i = 0; i < examQuestion.getQuestionAnswer().size(); i++) {
+                                                                editor.remove("QuestIndex " + i);
                                                                 editor.remove(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()));
                                                             }
                                                             editor.commit();
