@@ -185,13 +185,13 @@ public class ExamQuestionsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 for (int i = 0; i < examQuestion.getQuestionAnswer().size(); i++) {
                     String answer = sharedPreferences.getString(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()), "");
-                    if(answer!="") {
+                    if (answer != "") {
                         answerInputList.add(new StudentAnswerInput(
                                 answer,
                                 studentId,
                                 examQuestion.getQuestionAnswer().get(i).getExamQuestionId()
                         ));
-                    }else{
+                    } else {
                         continue;
                     }
                 }
@@ -206,15 +206,6 @@ public class ExamQuestionsActivity extends AppCompatActivity {
                             // bấm confirm sẽ gọi Post API để submit answer
                             @Override
                             public void onClick(SweetAlertDialog sDialog) {
-//                                List<StudentAnswerInput> answerInputs= new ArrayList<>();
-//                                // examID 31
-//                                answerInputs.add(new StudentAnswerInput("7", studentId, 73));
-//                                answerInputs.add(new StudentAnswerInput("46", studentId, 71));
-//                                answerInputs.add(new StudentAnswerInput("49", studentId, 72));
-
-//                                answerInputs.add(new StudentAnswerInput("168",studentId,74));
-//                                answerInputs.add(new StudentAnswerInput("85",studentId,75));
-//                                answerInputs.add(new StudentAnswerInput("16",studentId,76));
                                 callSubmit = service.submitExam(examId, studentId, answerInputList);
                                 callSubmit.enqueue(new Callback<ResponseDTO>() {
                                     @Override
@@ -222,7 +213,7 @@ public class ExamQuestionsActivity extends AppCompatActivity {
                                         if (!response.isSuccessful()) {
                                             Toast.makeText(getApplicationContext(), Integer.toString(response.code()), Toast.LENGTH_SHORT).show();
                                             return;
-                                        }else{
+                                        } else {
                                             // nếu submit thành công sẽ hiện popup để thông báo điểm
                                             SweetAlertDialog sDialog = new SweetAlertDialog(ExamQuestionsActivity.this);
                                             sDialog.setTitleText("Successful")
@@ -284,76 +275,61 @@ public class ExamQuestionsActivity extends AppCompatActivity {
             public void onFinish() {
                 for (int i = 0; i < examQuestion.getQuestionAnswer().size(); i++) {
                     String answer = sharedPreferences.getString(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()), "");
-                    if(answer!=null) {
+                    if (answer != null) {
                         answerInputList.add(new StudentAnswerInput(
                                 answer,
                                 studentId,
                                 examQuestion.getQuestionAnswer().get(i).getExamQuestionId()
                         ));
-                    }else{
+                    } else {
                         continue;
                     }
                 }
 
                 //SUBMIT EXAM TẠI ĐÂY (đã có đầy đủ 3 biến examId, studentId, answerInputList chỉ cần gọi lại đúng tên là xài được)
 
-                SweetAlertDialog confirmSubmit = new SweetAlertDialog(ExamQuestionsActivity.this, SweetAlertDialog.WARNING_TYPE);
-                confirmSubmit.setTitleText("Are you sure?")
-                        .setContentText("Do you really want to submit the exam?")
-                        .setConfirmText("Confirm!")
-                        .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                            // bấm confirm sẽ gọi Post API để submit answer
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
+                callSubmit = service.submitExam(examId, studentId, answerInputList);
+                callSubmit.enqueue(new Callback<ResponseDTO>() {
+                    @Override
+                    public void onResponse(Call<ResponseDTO> call, Response<ResponseDTO> response) {
+                        if (response.isSuccessful()) {
+                            // nếu submit thành công sẽ hiện popup để thông báo điểm
+                            SweetAlertDialog sDialog = new SweetAlertDialog(ExamQuestionsActivity.this);
+                            sDialog.setTitleText("Successful")
+                                    .setContentText(response.body().getMessage())
 
-                                callSubmit = service.submitExam(examId, studentId, answerInputList);
-                                callSubmit.enqueue(new Callback<ResponseDTO>() {
-                                    @Override
-                                    public void onResponse(Call<ResponseDTO> call, Response<ResponseDTO> response) {
-                                        if (response.isSuccessful()) {
-                                            // nếu submit thành công sẽ hiện popup để thông báo điểm
-                                            SweetAlertDialog sDialog = new SweetAlertDialog(ExamQuestionsActivity.this);
-                                            sDialog.setTitleText("Successful")
-                                                    .setContentText(response.body().getMessage())
+                                    .setConfirmText("Ok")
+                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                        // bấm Ok để chuyển trang
+                                        @Override
+                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
 
-                                                    .setConfirmText("Ok")
-                                                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                                                        // bấm Ok để chuyển trang
-                                                        @Override
-                                                        public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                            //Dời những dòng dưới vào chỗ sau khi submit exam và chấm điểm thành công
+                                            for (int i = 0; i < examQuestion.getQuestionAnswer().size(); i++) {
+                                                editor.remove("QuestIndex " + i);
+                                                editor.remove(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()));
+                                            }
+                                            editor.commit();
 
-                                                            //Dời những dòng dưới vào chỗ sau khi submit exam và chấm điểm thành công
-                                                            for (int i = 0; i < examQuestion.getQuestionAnswer().size(); i++) {
-                                                                editor.remove("QuestIndex " + i);
-                                                                editor.remove(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()));
-                                                            }
-                                                            editor.commit();
-
-                                                            Intent intent = new Intent(ExamQuestionsActivity.this, ModuleListActivity.class);
-                                                            startActivity(intent);
-                                                        }
-                                                    });
-
-                                            sDialog.setCancelable(false);
-                                            sDialog.show();
-
+                                            Intent intent = new Intent(ExamQuestionsActivity.this, ModuleListActivity.class);
+                                            startActivity(intent);
+                                            finish();
                                         }
-                                    }
+                                    });
 
-                                    @Override
-                                    public void onFailure(Call<ResponseDTO> call, Throwable t) {
-                                        Toast.makeText(ExamQuestionsActivity.this, "Failed 5000", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        })
-                        .setCancelButton("Cancel", new SweetAlertDialog.OnSweetClickListener() {
-                            @Override
-                            public void onClick(SweetAlertDialog sDialog) {
-                                sDialog.dismissWithAnimation();
-                            }
-                        });
-                confirmSubmit.show();
+                            sDialog.setCancelable(false);
+                            sDialog.show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseDTO> call, Throwable t) {
+                        Toast.makeText(ExamQuestionsActivity.this, "Some error happen", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
             }
         }.start();
     }
