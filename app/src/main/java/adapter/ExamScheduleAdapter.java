@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Build;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +86,7 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<ExamScheduleAdapte
         long diffInMillies = now.getTime() - date.getTime();
         long diff = TimeUnit.MINUTES.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
-        if(diff > 10){
+        if(diff > examSchedule.getDurationInMinute()){
             holder.btnStart.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#FF0000")));
             holder.btnStart.setText("Ended");
             holder.btnStart.setTextColor(Color.parseColor("#ffffff"));
@@ -114,6 +115,8 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<ExamScheduleAdapte
 //        final boolean[] check = new boolean[1];
         AlertDialog.Builder b = new AlertDialog.Builder(this.mContext);
         final EditText editText = new EditText(mContext);
+        editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        editText.setSelection(editText.getText().length());
 
         b.setTitle("Password")
                 .setView(editText)

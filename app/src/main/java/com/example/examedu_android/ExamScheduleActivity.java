@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +40,7 @@ public class ExamScheduleActivity extends BaseActivity {
     Call<ExamSchedule> call;
     ExamSchedule examSchedule;
     TextView today;
+    TextView upcomingexam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,7 @@ public class ExamScheduleActivity extends BaseActivity {
         SimpleDateFormat sdfSource = new SimpleDateFormat("EEEE, d MMMM yyyy");
         String date = sdfSource.format(Calendar.getInstance().getTime());
 
+        upcomingexam = findViewById(R.id.upcomingexam);
         today = findViewById(R.id.tvToday);
         today.setText(date);
 
@@ -66,19 +70,27 @@ public class ExamScheduleActivity extends BaseActivity {
             public void onResponse(Call<ExamSchedule> call, Response<ExamSchedule> response) {
                 examSchedule = response.body();
 
-                rcvExam = findViewById(R.id.rcv_exam);
+                if(response.isSuccessful()){
+                    rcvExam = findViewById(R.id.rcv_exam);
 
-                examScheduleAdapter = new ExamScheduleAdapter(ExamScheduleActivity.this,examSchedule.getPayload());
+                    examScheduleAdapter = new ExamScheduleAdapter(ExamScheduleActivity.this,examSchedule.getPayload());
 
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ExamScheduleActivity.this);
-                rcvExam.setLayoutManager(linearLayoutManager);
-                rcvExam.setAdapter(examScheduleAdapter);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ExamScheduleActivity.this);
+                    rcvExam.setLayoutManager(linearLayoutManager);
+                    rcvExam.setAdapter(examScheduleAdapter);
+                }else {
+                    upcomingexam.setText("Your Exam Schedule is empty!!!");
+                    upcomingexam.setTextColor(Color.parseColor("#ff0000"));
+
+                }
+
+
 
             }
 
             @Override
             public void onFailure(Call<ExamSchedule> call, Throwable t) {
-                Toast.makeText(ExamScheduleActivity.this,"sais roi",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ExamScheduleActivity.this,"An Error happened",Toast.LENGTH_SHORT).show();
             }
         });
 
