@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -72,6 +73,7 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<ExamScheduleAdapte
         sdfSource = new SimpleDateFormat("dd-MMMM");
         String finalDate = sdfSource.format(date);
 
+        boolean isAvailable=true;
         //get current daytime
         Date now = new Date();
 //        String examDate = sdfSource.format(dateTime);
@@ -92,19 +94,25 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<ExamScheduleAdapte
             holder.btnStart.setEnabled(false);
 
         }else if(date.after(now)){
-            holder.btnStart.setEnabled(false);
+            isAvailable=false;
+//            holder.btnStart.setEnabled(false);
         }
+        boolean finalIsAvailable = isAvailable;
         holder.btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(finalIsAvailable) {
 
-                checkPassword(examSchedule.getPassword(), new DialogSingleButtonListener() {
-                    @Override
-                    public void onButtonClicked(DialogInterface dialog) {
-                        //neu nhap dung password
-                        goToExam(examSchedule.getExamId());
-                    }
-                });
+                    checkPassword(examSchedule.getPassword(), new DialogSingleButtonListener() {
+                        @Override
+                        public void onButtonClicked(DialogInterface dialog) {
+                            //neu nhap dung password
+                            goToExam(examSchedule.getExamId());
+                        }
+                    });
+                }else {
+                    Toast.makeText(mContext.getApplicationContext(), "You cannot start the exam yet", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
