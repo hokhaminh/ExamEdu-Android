@@ -1,6 +1,9 @@
 package com.example.examedu_android.exam_questions;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +22,8 @@ public class QuestionNumAdapter extends RecyclerView.Adapter<QuestionNumAdapter.
     private int[] questionsNum;
     private final IOnItemClickListener listener;
     private Context context;
+    private SharedPreferences sharedPreferences;
+    private int selectedAnswer;
     public static volatile int selectedItem = 0, lastSelectedItem = 0;
 
     public QuestionNumAdapter(Context context,
@@ -32,6 +37,7 @@ public class QuestionNumAdapter extends RecyclerView.Adapter<QuestionNumAdapter.
     @NonNull
     @Override
     public QuestionNumViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        sharedPreferences = context.getSharedPreferences("answerChecked", MODE_PRIVATE);
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.question_icon, parent, false);
         return new QuestionNumViewHolder(view);
     }
@@ -39,10 +45,15 @@ public class QuestionNumAdapter extends RecyclerView.Adapter<QuestionNumAdapter.
     @Override
     public void onBindViewHolder(@NonNull QuestionNumViewHolder holder, int position) {
         int backgroundColor;
+        selectedAnswer = sharedPreferences.getInt("QuestIndex " + Integer.toString(position), -2);
         if (position == selectedItem) {
             backgroundColor = R.color.holder_gray;
         } else if (position == lastSelectedItem) {
-            backgroundColor = R.color.green;
+            if (selectedAnswer == -2) {
+                backgroundColor = R.color.gray;
+            } else {
+                backgroundColor = R.color.green;
+            }
         } else {
             backgroundColor = R.color.gray;
         }

@@ -49,7 +49,7 @@ public class ExamQuestionsActivity extends AppCompatActivity {
     Button btnFinish;
     CountDownTimer countDownTimer;
     long timeLeftInMilliseconds;
-    int currentQuestionIndex = 0, numberOfColumns;
+    int currentQuestionIndex = 0, numberOfColumns, uncheckedQuestionCount = 0;
     int[] questionsNum;
     int studentId, examId;
     List<StudentAnswerInput> answerInputList = new ArrayList<>();
@@ -185,13 +185,17 @@ public class ExamQuestionsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 for (int i = 0; i < examQuestion.getQuestionAnswer().size(); i++) {
                     String answer = sharedPreferences.getString(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()), "");
-                    if(answer!="") {
+                    if (answer != "") {
+                        if (uncheckedQuestionCount > 0) {
+                            uncheckedQuestionCount--;
+                        }
                         answerInputList.add(new StudentAnswerInput(
                                 answer,
                                 studentId,
                                 examQuestion.getQuestionAnswer().get(i).getExamQuestionId()
                         ));
-                    }else{
+                    } else {
+                        uncheckedQuestionCount++;
                         continue;
                     }
                 }
@@ -200,7 +204,8 @@ public class ExamQuestionsActivity extends AppCompatActivity {
 
                 SweetAlertDialog confirmSubmit = new SweetAlertDialog(ExamQuestionsActivity.this, SweetAlertDialog.WARNING_TYPE);
                 confirmSubmit.setTitleText("Are you sure?")
-                        .setContentText("Do you really want to submit the exam?")
+                        .setContentText((uncheckedQuestionCount == 0 ?
+                                "" : "You have " + uncheckedQuestionCount + " questions unchecked. ") + "Do you really want to submit the exam?")
                         .setConfirmText("Confirm!")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             // bấm confirm sẽ gọi Post API để submit answer
@@ -222,7 +227,7 @@ public class ExamQuestionsActivity extends AppCompatActivity {
                                         if (!response.isSuccessful()) {
                                             Toast.makeText(getApplicationContext(), Integer.toString(response.code()), Toast.LENGTH_SHORT).show();
                                             return;
-                                        }else{
+                                        } else {
                                             // nếu submit thành công sẽ hiện popup để thông báo điểm
                                             SweetAlertDialog sDialog = new SweetAlertDialog(ExamQuestionsActivity.this);
                                             sDialog.setTitleText("Successful")
@@ -284,13 +289,13 @@ public class ExamQuestionsActivity extends AppCompatActivity {
             public void onFinish() {
                 for (int i = 0; i < examQuestion.getQuestionAnswer().size(); i++) {
                     String answer = sharedPreferences.getString(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()), "");
-                    if(answer!=null) {
+                    if (answer != null) {
                         answerInputList.add(new StudentAnswerInput(
                                 answer,
                                 studentId,
                                 examQuestion.getQuestionAnswer().get(i).getExamQuestionId()
                         ));
-                    }else{
+                    } else {
                         continue;
                     }
                 }
