@@ -1,27 +1,15 @@
 package com.example.examedu_android;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Debug;
-import android.util.Log;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.JsonObject;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 import Token.TokenManager;
 import adapter.ExamScheduleAdapter;
@@ -71,6 +59,9 @@ public class ExamScheduleActivity extends BaseActivity {
                 examSchedule = response.body();
 
                 if(response.isSuccessful()){
+                    upcomingexam.setText("Your upcoming exam");
+                    upcomingexam.setTextColor(Color.parseColor("#3D5AF1"));
+
                     rcvExam = findViewById(R.id.rcv_exam);
 
                     examScheduleAdapter = new ExamScheduleAdapter(ExamScheduleActivity.this,examSchedule.getPayload());
@@ -83,9 +74,6 @@ public class ExamScheduleActivity extends BaseActivity {
                     upcomingexam.setTextColor(Color.parseColor("#ff0000"));
 
                 }
-
-
-
             }
 
             @Override

@@ -40,9 +40,9 @@ tools:openDrawer="start">
             android:id="@+id/upcomingexam"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Your upcoming exam"
+            android:text="Loading, please wait..."
             android:textAlignment="center"
-            android:textColor="#3D5AF1"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="25dp"/>
 
