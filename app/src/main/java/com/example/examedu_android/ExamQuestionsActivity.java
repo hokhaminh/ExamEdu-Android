@@ -3,12 +3,17 @@ package com.example.examedu_android;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +53,7 @@ public class ExamQuestionsActivity extends AppCompatActivity {
     ImageButton btnPrev, btnNext;
     Button btnFinish;
     CountDownTimer countDownTimer;
+    LinearLayout linExamQuestion;
     long timeLeftInMilliseconds;
     int currentQuestionIndex = 0, numberOfColumns;
     int[] questionsNum;
@@ -80,13 +86,18 @@ public class ExamQuestionsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ExamQuestion> call, Response<ExamQuestion> response) {
                 if (response != null) {
-                    if (!response.isSuccessful()) {
-                        Toast.makeText(getApplicationContext(), Integer.toString(response.code()), Toast.LENGTH_SHORT).show();
-                        return;
+                    examQuestion = response.body();
+                    if (response.isSuccessful()) {
+                        setView();
+                    } else {
+                        linExamQuestion.removeAllViewsInLayout();
+                        tvExamType.setText("Something error. Please try again!");
+                        tvExamType.setTextColor(Color.parseColor("#ff0000"));
+                        linExamQuestion.setGravity(Gravity.CENTER);
+                        ((ViewGroup) tvExamType.getParent()).removeView(tvExamType);
+                        linExamQuestion.addView(tvExamType);
                     }
 
-                    examQuestion = response.body();
-                    setView();
                 } else {
                     Toast.makeText(getApplicationContext(), "Cannot request data", Toast.LENGTH_SHORT).show();
                 }
@@ -110,6 +121,7 @@ public class ExamQuestionsActivity extends AppCompatActivity {
         btnPrev = findViewById(R.id.btn_prev);
         btnNext = findViewById(R.id.btn_next);
         btnFinish = findViewById(R.id.btn_finish);
+        linExamQuestion = findViewById(R.id.lin_exam_question);
         QuestionNumAdapter.selectedItem = 0;
         QuestionNumAdapter.lastSelectedItem = 0;
     }
@@ -119,7 +131,6 @@ public class ExamQuestionsActivity extends AppCompatActivity {
         tvModuleName.setText(examQuestion.getModuleCode());
 
         questionsNum = new int[examQuestion.getQuestionAnswer().size()];
-//        questionsNum = new int[30];
         for (int i = 0; i < questionsNum.length; i++) {
             questionsNum[i] = i + 1;
         }
@@ -183,15 +194,20 @@ public class ExamQuestionsActivity extends AppCompatActivity {
         btnFinish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int uncheckedQuestionCount = 0;
                 for (int i = 0; i < examQuestion.getQuestionAnswer().size(); i++) {
                     String answer = sharedPreferences.getString(Integer.toString(examQuestion.getQuestionAnswer().get(i).getExamQuestionId()), "");
                     if (answer != "") {
+                        if (uncheckedQuestionCount > 0) {
+                            uncheckedQuestionCount--;
+                        }
                         answerInputList.add(new StudentAnswerInput(
                                 answer,
                                 studentId,
                                 examQuestion.getQuestionAnswer().get(i).getExamQuestionId()
                         ));
                     } else {
+                        uncheckedQuestionCount++;
                         continue;
                     }
                 }
@@ -200,7 +216,8 @@ public class ExamQuestionsActivity extends AppCompatActivity {
 
                 SweetAlertDialog confirmSubmit = new SweetAlertDialog(ExamQuestionsActivity.this, SweetAlertDialog.WARNING_TYPE);
                 confirmSubmit.setTitleText("Are you sure?")
-                        .setContentText("Do you really want to submit the exam?")
+                        .setContentText((uncheckedQuestionCount == 0 ?
+                                "" : "You have " + uncheckedQuestionCount + " questions unchecked. ") + "Do you really want to submit the exam?")
                         .setConfirmText("Confirm!")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             // bấm confirm sẽ gọi Post API để submit answer
@@ -364,5 +381,26 @@ public class ExamQuestionsActivity extends AppCompatActivity {
         float screenWidthDp = displayMetrics.widthPixels / displayMetrics.density;
         int noOfColumns = (int) (screenWidthDp / columnWidthDp + 0.5); // +0.5 for correct rounding to int.
         return noOfColumns;
+    }
+
+    //Show warning when user try to click back button
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            SweetAlertDialog warningBackClick = new SweetAlertDialog(ExamQuestionsActivity.this, SweetAlertDialog.WARNING_TYPE);
+            warningBackClick.setTitleText("Warning")
+                    .setContentText("You cannot do this while doing the exam. Only click \"Finish\" button when you finish")
+                    .setCancelButton("OK", new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                        }
+                    });
+            warningBackClick.show();
+            warningBackClick.getButton(SweetAlertDialog.BUTTON_CONFIRM).setVisibility(View.GONE);
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 }

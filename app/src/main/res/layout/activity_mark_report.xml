@@ -19,20 +19,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_below="@id/ver_nav"
-        android:id="@+id/rcv_mark_report"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="10dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_mark_report"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ver_nav"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rcv_mark_report"
-        android:layout_marginTop="90dp"
-        android:text="Loading please wait" />
+        <TextView
+            android:id="@+id/tv_loading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rcv_mark_report"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="-4dp"
+            android:text="Loading, please wait..."
+            android:textAlignment="center"
+            android:textSize="15sp" />
     </RelativeLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/vertical_navigation"

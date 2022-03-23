@@ -1,16 +1,16 @@
 package com.example.examedu_android;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.Context;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.widget.Toast;
-
 import com.example.examedu_android.mark_report_folder.MarkReportAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import Token.TokenManager;
@@ -30,16 +30,15 @@ public class mark_report  extends BaseActivity {
 
     private RecyclerView rcvMarkReport;
     private MarkReportAdapter markReportAdapter;
+    private TextView tvLoading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mark_report);
         super.onCreateDrawer();
 
         setSupportActionBar(findViewById(R.id.myToolBar));
         getSupportActionBar().setTitle(null);
-        Toast.makeText(this, "day la mark report", Toast.LENGTH_SHORT).show();
         //call api
         service = CheckToken.check(this);
         if(service == null){
@@ -58,8 +57,15 @@ public class mark_report  extends BaseActivity {
         call.enqueue(new Callback<List<MarkReport>>() {
             @Override
             public void onResponse(Call<List<MarkReport>> call, Response<List<MarkReport>> response) {
+                tvLoading=findViewById(R.id.tv_loading);
                 markList = response.body();
-                setRcv();
+                if(response.isSuccessful()) {
+                    tvLoading.setVisibility(View.GONE);
+                    setRcv();
+                }else{
+                    tvLoading.setText("Your mark list in this module is empty");
+                    tvLoading.setTextColor(Color.parseColor("#ff0000"));
+                }
             }
 
             @Override
@@ -67,8 +73,6 @@ public class mark_report  extends BaseActivity {
 
             }
         });
-        Toast.makeText(this, "test", Toast.LENGTH_SHORT).show();
-
 
     }
 
