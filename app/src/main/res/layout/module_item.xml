@@ -10,88 +10,82 @@
     android:layout_marginEnd="10dp"
     app:cardCornerRadius="30dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="30dp"
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="35dp"
             android:layout_height="40dp"
+            android:layout_marginBottom="10dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginStart="128dp"
-            android:layout_marginTop="32dp"
             android:scaleType="fitXY"
-            android:src="@drawable/bookmark_icon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/moduleNameItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="68dp"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:text="ModuleName"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/moduleCodeItem" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="29dp"
-            android:layout_height="15dp"
-            android:layout_marginTop="140dp"
-            android:layout_marginEnd="20dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/graduation_cap_icon"
-            app:layout_constraintEnd_toStartOf="@+id/moduleNameItem"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:src="@drawable/bookmark_icon" />
 
         <TextView
             android:id="@+id/moduleCodeItem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="88dp"
-            android:layout_marginTop="84dp"
             android:text="ModuleCode"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="24sp" />
 
-        <ImageView
-            android:layout_width="29dp"
-            android:layout_height="15dp"
-            android:layout_marginTop="188dp"
-            android:layout_marginEnd="28dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/graduation_cap_icon"
-            app:layout_constraintEnd_toStartOf="@+id/teacherMailItem"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/teacherMailItem"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginStart="76dp"
-            android:layout_marginTop="28dp"
-            android:text="Email"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/moduleNameItem" />
+            android:gravity="center"
+            android:padding="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="29dp"
+                android:layout_height="15dp"
+                android:layout_marginRight="10dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/graduation_cap_icon" />
+
+            <TextView
+                android:id="@+id/moduleNameItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:text="ModuleName" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:gravity="center"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="29dp"
+                android:layout_height="15dp"
+                android:layout_marginRight="10dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/graduation_cap_icon" />
+
+            <TextView
+                android:id="@+id/teacherMailItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Email" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/viewMarkBtn"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginStart="68dp"
-            android:layout_marginTop="16dp"
             android:gravity="center"
-            android:text="View Mark List"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/teacherMailItem" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:text="View Mark List" />
+    </LinearLayout>
 </androidx.cardview.widget.CardView>
 
 

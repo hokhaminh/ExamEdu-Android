@@ -156,7 +156,7 @@ public class BaseActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(this, ExamScheduleActivity.class));
                 break;
             case R.id.nav_mark_report:
-                startActivity(new Intent(this, SubmitExamActivity.class));
+                startActivity(new Intent(this, ModuleListActivity.class));
                 finish();
                 break;
         }
