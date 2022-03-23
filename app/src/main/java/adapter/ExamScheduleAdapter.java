@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -123,7 +122,6 @@ public class ExamScheduleAdapter extends RecyclerView.Adapter<ExamScheduleAdapte
                 .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(mContext, "Confirm", Toast.LENGTH_SHORT).show();
                         String passwordInput =editText.getText().toString();
                         if( passwordInput.equals(password)){
                             dialogSingleButtonListener.onButtonClicked(dialogInterface);
