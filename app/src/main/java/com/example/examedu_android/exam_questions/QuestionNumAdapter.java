@@ -23,7 +23,7 @@ public class QuestionNumAdapter extends RecyclerView.Adapter<QuestionNumAdapter.
     private final IOnItemClickListener listener;
     private Context context;
     private SharedPreferences sharedPreferences;
-    private int selectedAnswer;
+    private String selectedAnswer;
     public static volatile int selectedItem = 0, lastSelectedItem = 0;
 
     public QuestionNumAdapter(Context context,
@@ -45,11 +45,11 @@ public class QuestionNumAdapter extends RecyclerView.Adapter<QuestionNumAdapter.
     @Override
     public void onBindViewHolder(@NonNull QuestionNumViewHolder holder, int position) {
         int backgroundColor;
-        selectedAnswer = sharedPreferences.getInt("QuestIndex " + Integer.toString(position), -2);
+        selectedAnswer = sharedPreferences.getString("QuestIndex " + Integer.toString(position), "");
         if (position == selectedItem) {
             backgroundColor = R.color.holder_gray;
         } else if (position == lastSelectedItem) {
-            if (selectedAnswer == -2) {
+            if (selectedAnswer.equals("")) {
                 backgroundColor = R.color.gray;
             } else {
                 backgroundColor = R.color.green;

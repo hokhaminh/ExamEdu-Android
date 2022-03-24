@@ -30,7 +30,7 @@ public class AnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private int currentQuestionIndex;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    private int selectedPosition;
+    private String selectedPosition;
 
     public AnswerAdapter(Context context, QuestionAnswer questionAnswer, int currentQuestionIndex) {
         this.context = context;
@@ -54,7 +54,7 @@ public class AnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         sharedPreferences = context.getSharedPreferences("answerChecked", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
         try {
-            selectedPosition = sharedPreferences.getInt("QuestIndex " + Integer.toString(currentQuestionIndex), -1);
+            selectedPosition = sharedPreferences.getString("QuestIndex " + Integer.toString(currentQuestionIndex), "");
         } catch (Exception e) {
         }
 
@@ -79,15 +79,17 @@ public class AnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             MCQAnswerViewHolder mcqAnswerViewHolder = (MCQAnswerViewHolder) holder;
             mcqAnswerViewHolder.tvAnswerContent.setText(answer.getAnswerContent());
 
-            mcqAnswerViewHolder.rdBtnAnswer.setChecked(position == selectedPosition);
+            if (selectedPosition != "") {
+                mcqAnswerViewHolder.rdBtnAnswer.setChecked(position == Integer.parseInt(selectedPosition));
+            }
 
             mcqAnswerViewHolder.rdBtnAnswer.setTag(position);
             mcqAnswerViewHolder.rdBtnAnswer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    selectedPosition = Integer.parseInt(view.getTag().toString());
-                    editor.putInt("QuestIndex " + Integer.toString(currentQuestionIndex), selectedPosition);
-                    editor.putString(Integer.toString(questionAnswer.getExamQuestionId()), Integer.toString(answerList.get(selectedPosition).getAnswerId()));
+                    selectedPosition = view.getTag().toString();
+                    editor.putString("QuestIndex " + Integer.toString(currentQuestionIndex), selectedPosition);
+                    editor.putString(Integer.toString(questionAnswer.getExamQuestionId()), Integer.toString(answerList.get(Integer.parseInt(selectedPosition)).getAnswerId()));
                     editor.commit();
                     notifyDataSetChanged();
                 }
@@ -97,9 +99,9 @@ public class AnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             mcqAnswerViewHolder.lnAnswer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    selectedPosition = Integer.parseInt(view.getTag().toString());
-                    editor.putInt("QuestIndex " + Integer.toString(currentQuestionIndex), selectedPosition);
-                    editor.putString(Integer.toString(questionAnswer.getExamQuestionId()), Integer.toString(answerList.get(selectedPosition).getAnswerId()));
+                    selectedPosition = view.getTag().toString();
+                    editor.putString("QuestIndex " + Integer.toString(currentQuestionIndex), selectedPosition);
+                    editor.putString(Integer.toString(questionAnswer.getExamQuestionId()), Integer.toString(answerList.get(Integer.parseInt(selectedPosition)).getAnswerId()));
                     editor.commit();
                     notifyDataSetChanged();
                 }
@@ -108,7 +110,7 @@ public class AnswerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             InputAnswerViewHolder inputAnswerViewHolder = (InputAnswerViewHolder) holder;
 
             try {
-                inputAnswerViewHolder.edtAnswer.setText(sharedPreferences.getString(Integer.toString(currentQuestionIndex), ""));
+                inputAnswerViewHolder.edtAnswer.setText(sharedPreferences.getString("QuestIndex " + Integer.toString(currentQuestionIndex), ""));
             } catch (Exception ex) {
             }
 
